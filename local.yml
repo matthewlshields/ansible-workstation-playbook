@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    playbook_repo_url: https://github.com/matthewlshields/ansible-workstation-playbook.git
+    playbook_repo_branch: main
+
+  pre_tasks:
+    - name: pre-run | update package cache (debian, etc)
+      tags: always
+      apt: update_cache=yes
+      changed_when: False
+      when: ansible_distribution in ["Debian", "Ubuntu"]
+
