@@ -1,1 +1,39 @@
 ---
+- name: DIRECTORIES | User home directory
+  ansible.builtin.set_fact:
+    home_dir: "{{ ansible_env.HOME }}"
+  tags:
+    - always
+
+- block:
+    - name: DIRECTORIES | Set binaries directory
+      ansible.builtin.set_fact:
+        bin_dir: "{{ workstation_bin_dir if workstation_bin_dir.startswith('/') else home_dir + '/' + workstation_bin_dir }}"
+
+    - name: DIRECTORIES | Create binaries directory
+      ansible.builtin.file:
+        path: "{{ bin_dir }}"
+        state: directory
+        mode: 0755
+      tags:
+        - always
+
+- block:
+    - name: DIRECTORIES | Set cache directory
+      ansible.builtin.set_fact:
+        workstation_cache_dir: "{{ workstation_cache_dir if workstation_cache_dir.startswith('/') else home_dir + '/' + workstation_cache_dir }}"
+
+    - name: DIRECTORIES | Create cache directory
+      ansible.builtin.file:
+        path: "{{ workstation_cache_dir }}"
+        state: directory
+        mode: 0755
+      tags:
+        - always
+
+
+- import_tasks: chezmoi.yml
+  when: workstation_chezmoi_enabled
+  tags:
+    - workstation
+    - chezmoi

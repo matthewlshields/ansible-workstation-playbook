@@ -1,1 +1,9 @@
 ---
+
+workstation_bin_dir: .local/bin
+workstation_cache_dir: .cache
+
+workstation_chezmoi_enabled: yes
+workstation_chezmoi_version: ''
+workstation_chezmoi_repo: ''
+
