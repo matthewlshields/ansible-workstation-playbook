@@ -1,0 +1,49 @@
+---
+- name: CHEZMOI | Set cache dir
+  ansible.builtin.set_fact:
+    chezmoi_cache_dir: "/home/matthew/.cache/chezmoi"
+
+- name: CHEZMOI | Create cache dir
+  ansible.builtin.file:
+    path: "{{ chezmoi_cache_dir }}"
+    state: directory
+
+- block:
+  - name: CHEZMOI | Determine latest version
+    ansible.builtin.shell:
+      cmd: curl -fsSL https://api.github.com/repos/twpayne/chezmoi/releases | grep -H "tag_name" | head -n 1 | cut -d \" -f4 | cut -c2-
+      warn: no
+    register: chezmoi_version_latest
+    changed_when: false
+  
+  - name: CHEZMOI | Set version
+    ansible.builtin.set_fact:
+      workstation_chezmoi_version: "{{ chezmoi_version_latest.stdout }}"
+    when: workstation_chezmoi_enabled | length == 0
+
+- name: CHEZMOI | Check if Chezmoi is already downloaded
+  ansible.builtin.stat:
+    path: "{{ chezmoi_cache_dir }}/chezmoi_{{ workstation_chezmoi_version }}_linux_amd64.tar.gz"
+  register: chezmoi_cache_file
+
+- name: CHEZMOI | Download version {{ workstation_chezmoi_version }}
+  ansible.builtin.get_url:
+    url: "https://github.com/twpayne/chezmoi/releases/download/v{{ workstation_chezmoi_version }}/chezmoi_{{ workstation_chezmoi_version }}_linux_amd64.tar.gz"
+    dest: "{{ chezmoi_cache_dir }}/chezmoi_{{ workstation_chezmoi_version }}_linux_amd64.tar.gz"
+  when: not chezmoi_cache_file.stat.exists
+
+- name: CHEZMOI | Unpack distribution
+  ansible.builtin.unarchive:
+    src: "{{ chezmoi_cache_dir }}/chezmoi_{{ workstation_chezmoi_version }}_linux_amd64.tar.gz"
+    dest: "{{ bin_dir }}"
+    mode: 0755
+    include:
+      - chezmoi
+    remote_src: yes
+  when: not chezmoi_cache_file.stat.exists
+
+- name: CHEZMOI | Init
+  ansible.builtin.command:
+    cmd: "chezmoi init --ssh {{ workstation_chezmoi_repo }} --apply"
+    creates: "/home/matthew/.local/share/chezmoi"
+  when: workstation_chezmoi_repo | length > 0
