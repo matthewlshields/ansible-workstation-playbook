@@ -1,2 +1,2 @@
 [workstation]
-mls.shields.cc
+localhost ansible_connection=local

@@ -12,14 +12,13 @@
   - name: CHEZMOI | Determine latest version
     ansible.builtin.shell:
       cmd: curl -fsSL https://api.github.com/repos/twpayne/chezmoi/releases | grep -H "tag_name" | head -n 1 | cut -d \" -f4 | cut -c2-
-      warn: no
     register: chezmoi_version_latest
     changed_when: false
   
   - name: CHEZMOI | Set version
     ansible.builtin.set_fact:
       workstation_chezmoi_version: "{{ chezmoi_version_latest.stdout }}"
-    when: workstation_chezmoi_enabled | length == 0
+    when: workstation_chezmoi_version | length == 0
 
 - name: CHEZMOI | Check if Chezmoi is already downloaded
   ansible.builtin.stat:

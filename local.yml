@@ -1,20 +1,9 @@
 ---
-- hosts: all
+- hosts: localhost
   tags: always
-  become: true
   vars:
+    ansible_python_interpreter: /home/matthew/.pyenv/shims/python3
     playbook_repo_url: https://github.com/matthewlshields/ansible-workstation-playbook.git
     playbook_repo_branch: main
-
-  pre_tasks:
-    - name: pre-run | update package cache (debian, etc)
-      tags: always
-      apt: update_cache=yes
-      changed_when: False
-      when: ansible_distribution in ["Debian", "Ubuntu"]
-
-- hosts: workstation
-  tags: workstation
-  become: true
   roles:
     - workstation
