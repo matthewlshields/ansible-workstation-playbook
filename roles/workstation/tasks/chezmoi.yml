@@ -7,18 +7,20 @@
   ansible.builtin.file:
     path: "{{ chezmoi_cache_dir }}"
     state: directory
+    mode: 0755
 
-- block:
-  - name: CHEZMOI | Determine latest version
-    ansible.builtin.shell:
-      cmd: curl -fsSL https://api.github.com/repos/twpayne/chezmoi/releases | grep -H "tag_name" | head -n 1 | cut -d \" -f4 | cut -c2-
-    register: chezmoi_version_latest
-    changed_when: false
-  
-  - name: CHEZMOI | Set version
-    ansible.builtin.set_fact:
-      workstation_chezmoi_version: "{{ chezmoi_version_latest.stdout }}"
-    when: workstation_chezmoi_version | length == 0
+- name: CHEZMOI | Version block
+  block:
+    - name: CHEZMOI | Determine latest version
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://api.github.com/repos/twpayne/chezmoi/releases | grep -H "tag_name" | head -n 1 | cut -d \" -f4 | cut -c2- # noqa: command-instead-of-module yaml[line-length]
+      register: chezmoi_version_latest
+      changed_when: false
+
+    - name: CHEZMOI | Set version
+      ansible.builtin.set_fact:
+        workstation_chezmoi_version: "{{ chezmoi_version_latest.stdout }}"
+      when: workstation_chezmoi_version | length == 0
 
 - name: CHEZMOI | Check if Chezmoi is already downloaded
   ansible.builtin.stat:
@@ -29,6 +31,7 @@
   ansible.builtin.get_url:
     url: "https://github.com/twpayne/chezmoi/releases/download/v{{ workstation_chezmoi_version }}/chezmoi_{{ workstation_chezmoi_version }}_linux_amd64.tar.gz"
     dest: "{{ chezmoi_cache_dir }}/chezmoi_{{ workstation_chezmoi_version }}_linux_amd64.tar.gz"
+    mode: 0755
   when: not chezmoi_cache_file.stat.exists
 
 - name: CHEZMOI | Unpack distribution
@@ -38,7 +41,7 @@
     mode: 0755
     include:
       - chezmoi
-    remote_src: yes
+    remote_src: true
   when: not chezmoi_cache_file.stat.exists
 
 - name: CHEZMOI | Init

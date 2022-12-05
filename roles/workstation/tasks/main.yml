@@ -5,7 +5,8 @@
   tags:
     - always
 
-- block:
+- name: DIRECTORIES | Binaries
+  block:
     - name: DIRECTORIES | Set binaries directory
       ansible.builtin.set_fact:
         bin_dir: "{{ workstation_bin_dir if workstation_bin_dir.startswith('/') else home_dir + '/' + workstation_bin_dir }}"
@@ -18,7 +19,8 @@
       tags:
         - always
 
-- block:
+- name: DIRECTORIES | Cache
+  block:
     - name: DIRECTORIES | Set cache directory
       ansible.builtin.set_fact:
         workstation_cache_dir: "{{ workstation_cache_dir if workstation_cache_dir.startswith('/') else home_dir + '/' + workstation_cache_dir }}"
@@ -31,8 +33,8 @@
       tags:
         - always
 
-
-- import_tasks: chezmoi.yml
+- name: Install Chezmoi
+  ansible.builtin.import_tasks: chezmoi.yml
   when: workstation_chezmoi_enabled
   tags:
     - workstation
