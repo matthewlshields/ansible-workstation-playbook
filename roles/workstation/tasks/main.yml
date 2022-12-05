@@ -39,3 +39,10 @@
   tags:
     - workstation
     - chezmoi
+
+- name: Install Kubectl
+  ansible.builtin.import_tasks: kubectl.yml
+  when: workstation_kubectl_enabled
+  tags:
+    - workstation
+    - kubectl

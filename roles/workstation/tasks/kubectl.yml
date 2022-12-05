@@ -1,0 +1,8 @@
+---
+- name: KUBECTL | Snap block
+  become: true
+  block:
+    - name: KUBECTL | Install
+      community.general.snap:
+        name: kubectl
+        classic: true
