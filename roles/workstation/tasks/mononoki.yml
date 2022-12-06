@@ -1,0 +1,23 @@
+---
+- name: MONONOKI | Check if font exists
+  ansible.builtin.find:
+    paths:
+      - "{{ workstation_fonts_dir }}"
+    patterns:
+      - 'mononoki*'
+  register: mononoki_fonts
+
+- name: MONONOKI | Debug
+  ansible.builtin.debug:
+    msg: "{{ mononoki_fonts }}"
+
+- name: MONONOKI | Retrieve and place fonts
+  when: mononoki_fonts.matched <= 0
+  ansible.builtin.unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/Mononoki.zip
+    dest: "{{ workstation_fonts_dir }}"
+    mode: 0644
+    remote_src: true
+    exclude:
+      - LICENSE.txt
+      - readme.md

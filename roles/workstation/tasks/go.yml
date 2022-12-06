@@ -1,0 +1,8 @@
+---
+- name: GO | Go install
+  become: true
+  community.general.snap:
+    name: go
+    classic: true
+    channel: "{{ item }}/stable"
+  loop: "{{ workstation_go_versions }}"

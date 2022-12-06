@@ -2,11 +2,16 @@
 
 workstation_bin_dir: .local/bin
 workstation_cache_dir: .cache
+workstation_fonts_dir: .fonts
 
 # Workstation configuration
 workstation_chezmoi_enabled: true
 workstation_chezmoi_version: ''
 workstation_chezmoi_repo: ''
+workstation_mononoki_enabled: true
 
 # Development tools
 workstation_kubectl_enabled: true
+workstation_go_enabled: true
+workstation_go_versions: ["1.18", "1.19"]
+workstation_go_default_version: "1.19"

@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: The local.yml for ansible-pull
+  hosts: localhost
   tags: always
   vars:
     ansible_python_interpreter: /home/matthew/.pyenv/shims/python3

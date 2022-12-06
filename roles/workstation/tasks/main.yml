@@ -33,6 +33,20 @@
       tags:
         - always
 
+- name: DIRECTORIES | Fonts
+  block:
+    - name: DIRECTORIES | Set fonts directory
+      ansible.builtin.set_fact:
+        workstation_fonts_dir: "{{ workstation_fonts_dir if workstation_fonts_dir.startswith('/') else home_dir + '/' + workstation_fonts_dir }}"
+
+    - name: DIRECTORIES | Create fonts directory
+      ansible.builtin.file:
+        path: "{{ workstation_fonts_dir }}"
+        state: directory
+        mode: 0755
+      tags:
+        - always
+
 - name: Install Chezmoi
   ansible.builtin.import_tasks: chezmoi.yml
   when: workstation_chezmoi_enabled
@@ -46,3 +60,18 @@
   tags:
     - workstation
     - kubectl
+
+- name: Install Go
+  ansible.builtin.import_tasks: go.yml
+  when: workstation_go_enabled
+  tags:
+    - workstation
+    - go
+
+- name: Install Mononoki Fonts
+  ansible.builtin.import_tasks: mononoki.yml
+  when: workstation_mononoki_enabled
+  tags:
+    - workstation
+    - mononoki
+    - fonts
