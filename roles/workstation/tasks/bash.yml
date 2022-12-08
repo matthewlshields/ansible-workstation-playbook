@@ -1,0 +1,21 @@
+---
+- name: BASH | Bash custom modules directory
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.bashrc.d"
+    state: directory
+    mode: 0755
+
+- name: BASH | Block in .bashrc to load customizations
+  ansible.builtin.blockinfile:
+    path: "{{ home_dir }}/.bashrc"
+    block: |
+      for file in {{ home_dir }}/.bashrc.d/*.sh; do
+        if [ -r "$file" ]; then
+          if [ "${-#*file}" != "$-" ]; then
+            . "$file"
+          else
+            . "$file" >/dev/null
+          fi
+        fi
+      done
+      unset file

@@ -1,0 +1,15 @@
+---
+- name: POWERLINE-GO | Install
+  ansible.builtin.command: go install github.com/justjanne/powerline-go@latest
+
+- name: POWERLINE-GO | Create config directory
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.config/powerline-go"
+    state: directory
+    mode: 0755
+
+- name: POWERLINE-GO | Add config to bashrc
+  ansible.builtin.copy:
+    src: home/.bashrc.d/powerline-go.sh
+    dest: "{{ home_dir }}/.bashrc.d/powerline-go.sh"
+    mode: 0644

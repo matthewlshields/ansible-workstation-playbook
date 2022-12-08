@@ -47,6 +47,12 @@
       tags:
         - always
 
+- name: Configure Bash
+  ansible.builtin.import_tasks: bash.yml
+  tags:
+    - workstation
+    - bash
+
 - name: Install Chezmoi
   ansible.builtin.import_tasks: chezmoi.yml
   when: workstation_chezmoi_enabled
@@ -75,3 +81,10 @@
     - workstation
     - mononoki
     - fonts
+
+- name: Install Powerline-Go
+  ansible.builtin.import_tasks: powerline-go.yml
+  when: workstation_powerlinego_enabled
+  tags:
+    - workstation
+    - powerlinego

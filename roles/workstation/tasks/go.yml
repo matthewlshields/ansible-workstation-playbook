@@ -6,3 +6,9 @@
     classic: true
     channel: "{{ item }}/stable"
   loop: "{{ workstation_go_versions }}"
+
+- name: GO | Add config to bashrc
+  ansible.builtin.copy:
+    src: home/.bashrc.d/go-config.sh
+    dest: "{{ home_dir }}/.bashrc.d/go-config.sh"
+    mode: 0644

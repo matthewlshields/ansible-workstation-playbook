@@ -9,6 +9,7 @@ workstation_chezmoi_enabled: true
 workstation_chezmoi_version: ''
 workstation_chezmoi_repo: ''
 workstation_mononoki_enabled: true
+workstation_powerlinego_enabled: true
 
 # Development tools
 workstation_kubectl_enabled: true
