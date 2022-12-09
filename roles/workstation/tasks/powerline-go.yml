@@ -8,6 +8,12 @@
     state: directory
     mode: 0755
 
+- name: POWERLINE-GO | Copy my theme
+  ansible.builtin.copy:
+    src: home/.config/powerline-go/personal-theme.json
+    dest: "{{ home_dir }}/.config/powerline-go/personal-theme.json"
+    mode: 0644
+
 - name: POWERLINE-GO | Add config to bashrc
   ansible.builtin.copy:
     src: home/.bashrc.d/powerline-go.sh
