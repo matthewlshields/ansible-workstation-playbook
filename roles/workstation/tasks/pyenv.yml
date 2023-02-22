@@ -1,0 +1,54 @@
+---
+- name: PYENV | Apt update, if needed
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: PYENV | Install apt dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - make
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - curl
+      - llvm
+      - libncursesw5-dev
+      - xz-utils
+      - tk-dev
+      - libxml2-dev
+      - libxmlsec1-dev
+      - libffi-dev
+      - liblzma-dev
+
+- name: PYENV | Install pip dependencies
+  ansible.builtin.pip:
+    name: jmespath
+
+- name: PYENV | Get releases
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/pyenv/pyenv/releases
+    return_content: true
+  register: pyenv_releases
+
+- name: PYENV | Determine latest release version
+  ansible.builtin.set_fact:
+    pyenv_version: "{{ pyenv_releases.json | json_query('[?!prerelease].tag_name') | first }}"
+
+- name: PYENV | Install
+  ansible.builtin.git:
+    repo: https://github.com/pyenv/pyenv.git
+    version: "{{ pyenv_version }}"
+    dest: "{{ home_dir }}/.pyenv"
+    force: true
+
+- name: PYENV | Add config to bashrc
+  ansible.builtin.copy:
+    src: home/.bashrc.d/pyenv.sh
+    dest: "{{ home_dir }}/.bashrc.d/pyenv.sh"
+    mode: 0644

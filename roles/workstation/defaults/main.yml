@@ -16,3 +16,5 @@ workstation_kubectl_enabled: true
 workstation_go_enabled: true
 workstation_go_versions: ["1.18", "1.19"]
 workstation_go_default_version: "1.19"
+workstation_pyenv_enabled: true
+workstation_vscode_enabled: true

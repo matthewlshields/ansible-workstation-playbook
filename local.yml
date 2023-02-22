@@ -3,7 +3,7 @@
   hosts: localhost
   tags: always
   vars:
-    ansible_python_interpreter: /home/matthew/.pyenv/shims/python3
+    ansible_python_interpreter: /usr/bin/python3
     playbook_repo_url: https://github.com/matthewlshields/ansible-workstation-playbook.git
     playbook_repo_branch: main
   roles:

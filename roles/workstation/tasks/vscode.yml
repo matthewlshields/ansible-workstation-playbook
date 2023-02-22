@@ -1,0 +1,7 @@
+---
+- name: VSCODE | Install with Snap
+  become: true
+  snap:
+    name: code
+    channel: stable
+    classic: true

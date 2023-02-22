@@ -1,0 +1,9 @@
+---
+- name: SNAPD | Install
+  become: true
+  ansible.builtin.package:
+    name: snapd
+  notify:
+    - enable snapd
+    - restart snapd
+

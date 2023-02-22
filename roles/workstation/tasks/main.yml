@@ -47,6 +47,12 @@
       tags:
         - always
 
+- name: Install Snapd
+  ansible.builtin.import_tasks: snapd.yml
+  tags:
+    - workstation
+    - snapd
+
 - name: Configure Bash
   ansible.builtin.import_tasks: bash.yml
   tags:
@@ -88,3 +94,17 @@
   tags:
     - workstation
     - powerlinego
+
+- name: Install VS Code
+  ansible.builtin.import_tasks: vscode.yml
+  when: workstation_vscode_enabled
+  tags:
+    - workstation
+    - vscode
+
+- name: Install Pyenv
+  ansible.builtin.import_tasks: pyenv.yml
+  when: workstation_pyenv_enabled
+  tags:
+    - workstation
+    - pyenv

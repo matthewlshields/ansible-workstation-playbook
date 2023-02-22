@@ -1,0 +1,13 @@
+---
+- name: enable snapd # noqa name[casing]
+  become: true
+  ansible.builtin.service:
+    name: snapd.socket
+    enabled: true
+
+- name: restart snapd # noqa name[casing]
+  become: true
+  ansible.builtin.service:
+    name: snapd.socket
+    state: restarted
+
