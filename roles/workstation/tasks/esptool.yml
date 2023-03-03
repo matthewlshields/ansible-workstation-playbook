@@ -1,0 +1,8 @@
+---
+- name: ESPTOOL | Install setup tools
+  ansible.builtin.pip:
+    name: setuptools
+
+- name: ESPTOOL | Install ESP Tools
+  ansible.builtin.pip:
+    name: esptool
