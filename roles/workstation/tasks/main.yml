@@ -108,3 +108,10 @@
   tags:
     - workstation
     - pyenv
+
+- name: Install ESP Tool
+  ansible.builtin.import_tasks: esptool.yml
+  when: workstation_esptool_enabled
+  tags:
+    - workstation
+    - esptool
