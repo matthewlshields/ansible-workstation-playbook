@@ -1,0 +1,31 @@
+name: 'Secrets'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch_secrets:
+    runs-on: ubuntu-latest
+    permissions:  # IMPORTANT - both of these are required
+      id-token: write
+      contents: read
+    name: Fetch some static secrets
+    steps:
+    - name: Fetch secrets from Akeyless
+      id: fetch-secrets
+      uses: akeyless-community/akeyless-action@v3
+      with:
+        access-id: p-7yc2tm1xfeia     # (ex: 'p-iwt13fd19ajd') We recommend storing this as a GitHub Actions secret
+        static-secrets: '{"/poc/test static secret":"my_first_secret","/poc/test static secret":"my_second_secret"}'
+        
+    - name: Use Outputs
+      run: |
+        echo "Step Outputs"
+        echo "my_first_secret: ${{ steps.fetch-secrets.outputs.my_first_secret }}"
+        echo "my_second_secret: ${{ steps.fetch-secrets.outputs.my_second_secret }}"
+        # echo "my_dynamic_secret: ${{ steps.fetch-secrets.outputs.my_dynamic_secret }}"
+        
+        echo "Environment Variables"
+        echo "my_first_secret: ${{ env.my_first_secret }}"
+        echo "my_second_secret: ${{ env.my_second_secret }}"
+        # echo "my_dynamic_secret: ${{ env.my_dynamic_secret }}"
