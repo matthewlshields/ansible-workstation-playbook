@@ -16,7 +16,7 @@ jobs:
       uses: akeyless-community/akeyless-action@v3
       with:
         access-id: p-7yc2tm1xfeia     # (ex: 'p-iwt13fd19ajd') We recommend storing this as a GitHub Actions secret
-        static-secrets: '{"/poc/test static secret":"my_first_secret","/poc/test static secret":"my_second_secret"}'
+        static-secrets: '{"/poc/test static secret":"my_first_secret","/poc/ansible1":"my_second_secret"}'
         
     - name: Use Outputs
       run: |
